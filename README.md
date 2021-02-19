@@ -33,3 +33,8 @@ Vous pouvez suivre votre nombre de vie et votre score en bas à droite de votre 
 Vous pouvez aussi retrouver votre score lorsque vous perdez toutes vos vies.
 
 ![fin_de_partie](https://raw.githubusercontent.com/clementor5/SpaceInvader/main/imgReadMe/fin_de_partie.png)
+
+-----------------------------------------------------------------------------------------------------------------
+
+#TODO faire une boucle d'apparition des ennemies a l'infini
+#TODO ordre difficulté + gerer difficulté
