@@ -9,10 +9,6 @@ import time
 
 import random
 
-# TODO bonus
-# TODO difficulté
-# TODO vagues d'ennemies ou apparition random
-
 class Game(object):
 
     def __init__(self):
