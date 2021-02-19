@@ -37,7 +37,11 @@ Vous pouvez aussi retrouver votre score lorsque vous perdez toutes vos vies.
 -----------------------------------------------------------------------------------------------------------------
 
 #TODO ameliorer l'apparition des ennemis (waves ou random)
+
 #TODO ordre difficulté + gerer difficulté
+
 #TODO changer missiles en fonction des ennemis
+
 #TODO choisir parmis plusieurs vaisseaux
+
 #TODO ajouter des bonus
