@@ -176,8 +176,12 @@ class Game(object):
 
     # Rafraichissement de l'ecran
     def draw_game_screen(self):
+        # Affichage du fond du jeu
         self.screen.blit(self.fond, self.fondrect)
-        if(game.explosion < 0):
+
+        if(self.ship.lives > 0):
+
+            # Affichage du vaisseau
             if(self.ship.invincibility > 0):
                 if(self.ship.invincibility % 5):
                     image_invincible = pygame.image.load("img/ships/ship.gif").convert()
@@ -191,22 +195,19 @@ class Game(object):
             self.screen.blit(self.ship.image, self.ship.rect)
 
         # Affichage des missiles de notre vaisseau
-        for obj in self.ship.missiles:
-            if (obj.rect.y < 0 - obj.height):
-                # On enleve la balle hors de l'ecran
-                self.ship.missiles.remove(obj)
-            else:
-                self.screen.blit(obj.image, obj.rect)  # On affiche le missile
+            for obj in self.ship.missiles:
+                if (obj.rect.y < 0 - obj.height):
+                    self.ship.missiles.remove(obj) # On enleve la balle hors de l'ecran
+                else:
+                    self.screen.blit(obj.image, obj.rect)  # On affiche le missile
 
         # Affichage des missiles des ennemies
         for enemy in self.enemies:  # pour chaque ennemi
             for obj in enemy.missiles:  # pour chacun de ses missiles
                 if (obj.rect.y > self.screen.get_rect().height - obj.height):
-                    # On enleve la balle hors de l'ecran
-                    enemy.missiles.remove(obj)
+                    enemy.missiles.remove(obj) # On enleve la balle hors de l'ecran
                 else:
-                    # On affiche le missile
-                    self.screen.blit(obj.image, obj.rect)
+                    self.screen.blit(obj.image, obj.rect) # On affiche le missile
 
         # Affichage des ennemis
         for obj in self.enemies:
@@ -432,31 +433,32 @@ class Ship():
 
     def update(self):
 
-        # raffraichir la position des missiles
-        for obj in self.missiles:
-            obj.update()
+        if(self.lives > 0):
+            # raffraichir la position des missiles
+            for obj in self.missiles:
+                obj.update()
 
-        # raffraichir la position du vaisseau
-        self.latency += 1
-        k = pygame.key.get_pressed()
-        if (k[K_RIGHT] and self.rect.x < self.screen.get_rect().width - self.width):
-            self.rect.x = self.rect.x + 6
-        if (k[K_LEFT] and self.rect.x > 0):
-            self.rect.x = self.rect.x - 6
-        if (k[K_UP] and self.rect.y > 0):
-            self.rect.y = self.rect.y - 6
-        if (k[K_DOWN] and self.rect.y < self.screen.get_rect().height - self.height):
-            self.rect.y = self.rect.y + 6
-        if (k[K_SPACE]) and self.latency >= 8:
-            self.missiles.append(AllyMissile(
-                8, pygame.image.load("img/shots/shot.gif").convert()))
-            self.missiles[len(self.missiles) - 1].rect.x = self.rect.x + 10
-            self.missiles[len(self.missiles) - 1].rect.y = self.rect.y - 15
+            # raffraichir la position du vaisseau
+            self.latency += 1
+            k = pygame.key.get_pressed()
+            if (k[K_RIGHT] and self.rect.x < self.screen.get_rect().width - self.width):
+                self.rect.x = self.rect.x + 6
+            if (k[K_LEFT] and self.rect.x > 0):
+                self.rect.x = self.rect.x - 6
+            if (k[K_UP] and self.rect.y > 0):
+                self.rect.y = self.rect.y - 6
+            if (k[K_DOWN] and self.rect.y < self.screen.get_rect().height - self.height):
+                self.rect.y = self.rect.y + 6
+            if (k[K_SPACE]) and self.latency >= 8:
+                self.missiles.append(AllyMissile(
+                    8, pygame.image.load("img/shots/shot.gif").convert()))
+                self.missiles[len(self.missiles) - 1].rect.x = self.rect.x + 10
+                self.missiles[len(self.missiles) - 1].rect.y = self.rect.y - 15
 
-            if self.is_sound:
-                self.sound.play()
+                if self.is_sound:
+                    self.sound.play()
 
-            self.latency = 0
+                self.latency = 0
 
 def set_difficulty(value, difficulty):
     print("TODO")
