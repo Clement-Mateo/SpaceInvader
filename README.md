@@ -1,8 +1,9 @@
-# SpaceInvader
-
-### Petit projet de jeu 2D en python, un space invader !
+# Petit projet de jeu 2D en python, un space invader !
 
 ## Vous pouvez télécharger l'executable du jeu ici : [Zip du jeu](https://github.com/clementor5/SpaceInvader/raw/main/exe/Game.zip)
+### Vous devrez ensuite dezipper ce dossier et executer le fichier "Game.exe"
+
+![Game.exe](https://raw.githubusercontent.com/clementor5/SpaceInvader/main/imgReadMe/game.exe.png)
 
 #### Au démarage du jeu, un menu apparaitra pour vous proposez différents choix :
 - Choisir votre pseudonyme (pas encore d'incidence sur le jeu)
