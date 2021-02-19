@@ -38,3 +38,4 @@ Vous pouvez aussi retrouver votre score lorsque vous perdez toutes vos vies.
 
 #TODO faire une boucle d'apparition des ennemies a l'infini
 #TODO ordre difficulté + gerer difficulté
+#TODO choisir parmis plusieurs vaisseaux ( faire eventuellement changer les missiles ussi)
