@@ -4,3 +4,5 @@ python3 -m pip install -U pygame --user
 python3 -m pygame.examples.aliens
 
 pip install pygame-menu
+
+auto-py-to-exe
