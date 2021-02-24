@@ -13,10 +13,12 @@ class Game(object):
 
     def __init__(self):
         self.sound = False
+        self.difficulty = 0
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((640, 400))
         self.fond = pygame.image.load("img/util/earth.png").convert()
         self.fondrect = self.fond.get_rect()
+        self.ship_image = 0
 
     # Fonction principale du jeu
     def main(self):
@@ -28,8 +30,10 @@ class Game(object):
     def setup(self):
         self.closingGame = False
         self.score = 0
-        self.ship = Ship(pygame.image.load(
-            "img/ships/ship.gif").convert(), self.screen, self.sound)
+        if(self.ship_image == 0):
+            self.ship = Ship(pygame.image.load("img/ships/ship.gif").convert(), self.screen, self.sound)
+        elif(self.ship_image == 1):
+            self.ship = Ship(pygame.image.load("img/ships/ship_2.gif").convert(), self.screen, self.sound)
         self.ship.rect.y = 400 - 25
         self.fond = pygame.image.load("img/util/earth.png").convert()
         self.fondrect = self.fond.get_rect()
@@ -42,14 +46,32 @@ class Game(object):
     def draw_menu_screen(self):
         menu = pygame_menu.Menu(400, 640, 'Space-invader',
                                 theme=pygame_menu.themes.THEME_DARK)
+
         menu.add_text_input('Pseudo :', default='USER')
-        menu.add_selector(
-            'Difficulty : ', [('Facile', 1), ('Intermediaire', 2), ('Difficile', 3)], onchange=set_difficulty)
-        menu.add_selector(
-            'Son : ', [('Sans', 1, False), ('Avec', 2, True)], onchange=set_sound)
+
+        menu.add_selector('Difficulty : ', [('Facile', 1), ('Intermediaire', 2), ('Difficile', 3)], onchange=self.set_difficulty)
+
+        menu.add_button('Changer de vaisseau', self.changer_vaisseau)
+        menu.add_image("img/ships/ship.gif", angle=0, scale=(2, 2), scale_smooth=True)
+
+        menu.add_selector('Son : ', [('Sans', False), ('Avec', True)], onchange=self.set_sound)
+
         menu.add_button('Jouer', self.start_the_game)
         menu.add_button('Quitter', pygame_menu.events.EXIT)
+
         menu.mainloop(self.screen, bgfun=self.draw_background)
+
+    def changer_vaisseau(self):
+        if(self.ship_image == 1):
+            setattr(self, "ship_image", 0)
+        else:
+            setattr(self, "ship_image", self.ship_image + 1)
+
+    def set_difficulty(self, value, ratio, difficulty):
+        setattr(self, "difficulty", value)
+
+    def set_sound(self, value, boolean):
+        setattr(self, "sound", boolean)
 
     def start_the_game(self):
         self.setup()
@@ -104,53 +126,60 @@ class Game(object):
 
     def game_over(self):
         if self.ship.lives < 1:
+
+            # Lancement du processus d'explosion
             if(self.explosion < 0):
                 self.explosion = 1400
 
-            if(self.explosion >= 0):
-                if(self.explosion == 1400):
-                    self.ship.image = pygame.image.load("img/util/explode_1.gif").convert()
-                elif(self.explosion == 1200):
-                    self.ship.image = pygame.image.load("img/util/explode_2.gif").convert()
-                elif(self.explosion == 1000):
-                    self.ship.image = pygame.image.load("img/util/explode_3.gif").convert()
-                elif(self.explosion == 800):
-                    self.ship.image = pygame.image.load("img/util/explode_4.gif").convert()
-                elif(self.explosion == 600):
-                    self.ship.image = pygame.image.load("img/util/explode_5.gif").convert()
-                elif(self.explosion == 400):
-                    self.ship.image = pygame.image.load("img/util/explode_6.gif").convert()
-                elif(self.explosion == 200):
-                    self.ship.image = pygame.image.load("img/util/explode_7.gif").convert()
-                elif(self.explosion == 0):
-                    self.ship.image = pygame.image.load("img/util/explode_8.gif").convert()
+            # Animation du gif d'explosion
+            if(self.explosion == 1400):
+                self.ship.image = pygame.image.load("img/util/explode_1.gif").convert()
+            elif(self.explosion == 1200):
+                self.ship.image = pygame.image.load("img/util/explode_2.gif").convert()
+            elif(self.explosion == 1000):
+                self.ship.image = pygame.image.load("img/util/explode_3.gif").convert()
+            elif(self.explosion == 800):
+                self.ship.image = pygame.image.load("img/util/explode_4.gif").convert()
+            elif(self.explosion == 600):
+                self.ship.image = pygame.image.load("img/util/explode_5.gif").convert()
+            elif(self.explosion == 400):
+                self.ship.image = pygame.image.load("img/util/explode_6.gif").convert()
+            elif(self.explosion == 200):
+                self.ship.image = pygame.image.load("img/util/explode_7.gif").convert()
+            elif(self.explosion == 0): # A la fin de l'animation
+                self.ship.image = pygame.image.load("img/util/explode_8.gif").convert()
+                # On change le fond
+                self.fond = pygame.image.load("img/util/explode.gif").convert()
+                self.fond = pygame.transform.scale(
+                    self.fond, (640, 400))
+                self.screen.blit(self.fond, self.fondrect)
 
-                    self.fond = pygame.image.load("img/util/explode.gif").convert()
-                    self.fond = pygame.transform.scale(
-                        self.fond, (640, 400))
-                    self.screen.blit(self.fond, self.fondrect)
+                # On affiche Game Over et le score
+                font = pygame.font.Font('freesansbold.ttf', 80)
+                text = font.render('GAME OVER', True, (255, 255, 255), (0, 0, 0))
+                textRect = text.get_rect()
+                textRect.center = (320, 200)
+                self.screen.blit(text, textRect)
 
-                    font = pygame.font.Font('freesansbold.ttf', 80)
-                    text = font.render('GAME OVER', True, (255, 255, 255), (0, 0, 0))
-                    textRect = text.get_rect()
-                    textRect.center = (320, 200)
-                    self.screen.blit(text, textRect)
+                font = pygame.font.Font('freesansbold.ttf', 40)
+                text = font.render('Score : ' + str(self.score),
+                                True, (255, 255, 255), (0, 0, 0))
+                textRect = text.get_rect()
+                textRect.center = (330, 300)
+                self.screen.blit(text, textRect)
 
-                    font = pygame.font.Font('freesansbold.ttf', 40)
-                    text = font.render('Score : ' + str(self.score),
-                                    True, (255, 255, 255), (0, 0, 0))
-                    textRect = text.get_rect()
-                    textRect.center = (330, 300)
-                    self.screen.blit(text, textRect)
+                # On met a jour l'ecran
+                pygame.display.flip()
 
-                    pygame.display.flip()
+                # Et on lance le son d'explosion si le son n'est pas desactivé
+                if self.sound:
+                    pygame.mixer.music.play()
 
-                    if self.sound:
-                        pygame.mixer.music.play()
-
-                    time.sleep(2)
-                    self.closingGame = True
-
+                # On affiche ca pendant 2 secondes
+                time.sleep(2)
+                # Puis on ferme le jeu
+                self.closingGame = True
+                # Permet l'avancement de l'animation du gif d'explosion
                 self.explosion -= 20
 
     def invoqueEnnemies(self):
@@ -191,11 +220,11 @@ class Game(object):
             self.screen.blit(self.ship.image, self.ship.rect)
 
         # Affichage des missiles de notre vaisseau
-            for obj in self.ship.missiles:
-                if (obj.rect.y < 0 - obj.height):
-                    self.ship.missiles.remove(obj) # On enleve la balle hors de l'ecran
-                else:
-                    self.screen.blit(obj.image, obj.rect)  # On affiche le missile
+        for obj in self.ship.missiles:
+            if (obj.rect.y < 0 - obj.height):
+                self.ship.missiles.remove(obj) # On enleve la balle hors de l'ecran
+            else:
+                self.screen.blit(obj.image, obj.rect)  # On affiche le missile
 
         # Affichage des missiles des ennemies
         for enemy in self.enemies:  # pour chaque ennemi
@@ -455,12 +484,6 @@ class Ship():
                     self.sound.play()
 
                 self.latency = 0
-
-def set_difficulty(value, difficulty):
-    print("TODO")
-
-def set_sound(value, index, boolean):
-    setattr(game, "sound", boolean)
 
 # animation()
 game = Game()
