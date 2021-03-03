@@ -15,7 +15,7 @@ class Game(object):
         self.sound = False
         self.difficulty = 0
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((640, 400))
+        self.screen = pygame.display.set_mode((640, 500))
         self.fond = pygame.image.load("img/util/earth.png").convert()
         self.fondrect = self.fond.get_rect()
         self.ship_image = 0
@@ -34,8 +34,8 @@ class Game(object):
             self.ship = Ship(pygame.image.load("img/ships/ship.gif").convert(), self.screen, self.sound)
         elif(self.ship_image == 1):
             self.ship = Ship(pygame.image.load("img/ships/ship_2.gif").convert(), self.screen, self.sound)
-        self.ship.rect.y = 400 - 25
-        self.fond = pygame.image.load("img/util/earth.png").convert()
+        self.ship.rect.y = 500 - 25
+        self.fond = pygame.image.load("img/util/stars.jpg").convert()
         self.fondrect = self.fond.get_rect()
         self.explosion = -20
         self.enemies = []
@@ -44,7 +44,7 @@ class Game(object):
         self.enemies.append(Enemy(self.screen, {"x": 400, "y": 0}, self.sound))
 
     def draw_menu_screen(self):
-        menu = pygame_menu.Menu(400, 640, 'Space-invader',
+        menu = pygame_menu.Menu(500, 640, 'Space-invader',
                                 theme=pygame_menu.themes.THEME_DARK)
 
         menu.add_text_input('Pseudo :', default='USER')
@@ -151,7 +151,7 @@ class Game(object):
                 # On change le fond
                 self.fond = pygame.image.load("img/util/explode.gif").convert()
                 self.fond = pygame.transform.scale(
-                    self.fond, (640, 400))
+                    self.fond, (640, 500))
                 self.screen.blit(self.fond, self.fondrect)
 
                 # On affiche Game Over et le score
@@ -179,8 +179,9 @@ class Game(object):
                 time.sleep(2)
                 # Puis on ferme le jeu
                 self.closingGame = True
-                # Permet l'avancement de l'animation du gif d'explosion
-                self.explosion -= 20
+            
+            # Permet l'avancement de l'animation du gif d'explosion
+            self.explosion -= 20
 
     def invoqueEnnemies(self):
         if self.score < 9:
@@ -307,7 +308,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.delayMove == 0:
             self.delayMove = 2
             self.rect.y += 1
-        if self.delayMove > 0 and self.rect.y < 400:
+        if self.delayMove > 0 and self.rect.y < 500:
             self.delayMove -= 1
         else:
             setattr(game.ship, "lives", getattr(game.ship, "lives")-1)
@@ -396,7 +397,7 @@ class EnemySprint(Enemy):
         if self.delayMove == 0:
             self.delayMove = 2
             self.rect.y += 3
-        if self.delayMove > 0 and self.rect.y < 400:
+        if self.delayMove > 0 and self.rect.y < 500:
             self.delayMove -= 1
         else:
             setattr(game.ship, "lives", getattr(game.ship, "lives")-1)
