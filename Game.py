@@ -43,8 +43,16 @@ class Game(object):
         self.enemies.append(Enemy(self.screen, {"x": 400, "y": 0}, self.sound))
 
     def draw_menu_screen(self):
+
+        theme = pygame_menu.themes.THEME_DARK.copy()
+        theme.title_background_color = (0, 0, 0)
+        theme.widget_font = pygame_menu.font.FONT_MUNRO
+        theme.widget_font_size = 40
+        theme.title_font = pygame_menu.font.FONT_MUNRO
+        theme.title_font_size = 50
+        theme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
         
-        self.menu = pygame_menu.Menu(500, 640, 'Space-invader', theme=pygame_menu.themes.THEME_DARK)
+        self.menu = pygame_menu.Menu(500, 640, 'Space invader', theme=theme)
 
         self.menu.add_button('Jouer', self.start_the_game)
 
@@ -56,31 +64,44 @@ class Game(object):
 
         self.menu.add_selector('Son : ', [('Sans', False), ('Avec', True)], onchange=self.set_sound)
 
-        self.menu.add_button('Changer de vaisseau', self.changer_vaisseau)
+        self.menu.add_button('Changer de vaisseau', self.change_ship)
         self.imageShip = self.menu.add_image(self.path_ship_image, angle=0, scale=(2, 2), scale_smooth=True)
 
         self.menu.mainloop(self.screen, bgfun=self.draw_background)
 
-    def changer_vaisseau(self):
-
-        if(self.ship_num == 33):
-            self.ship_num = 1
-        else:
-            self.ship_num += 1
-        
-        self.menu.remove_widget(self.imageShip)
-        self.path_ship_image = "img/ships/ship_" + str(self.ship_num) + ".gif"
-        self.imageShip = self.menu.add_image(self.path_ship_image, angle=0, scale=(2, 2), scale_smooth=True)
-
-    def set_difficulty(self, value, ratio, difficulty):
-        setattr(self, "difficulty", value)
-
-    def set_sound(self, value, boolean):
-        setattr(self, "sound", boolean)
-
+    # Lance une nouvelle partie
     def start_the_game(self):
         self.setup()
         self.main_loop()
+
+    # Change la difficulté du Jeu (#TODO aucun impact aujourd'hui)
+    def set_difficulty(self, ratio, difficulty):
+        setattr(self, "difficulty", ratio)
+
+    # Change le vaisseau choisi
+    def change_ship(self):
+
+        # On ramene vers le premier vaisseau lorsqu'on atteint la fin de la liste
+        if(self.ship_num == 33):
+            self.ship_num = 1
+        else:
+            self.ship_num += 1 # On choisi le vaisseau suivant
+        
+        # On met a jour le chemin de l'image du vaisseau choisi
+        self.path_ship_image = "img/ships/ship_" + str(self.ship_num) + ".gif"
+
+        # On supprime l'image de l'ancien vaisseau dans le menu
+        self.menu.remove_widget(self.imageShip)
+
+        # On ajoute l'image du nouveau vaisseau choisi dans le menu
+        self.imageShip = self.menu.add_image(self.path_ship_image, angle=0, scale=(2, 2), scale_smooth=True)
+
+    # Active ou desactive le son du jeu
+    def set_sound(self, value, boolean):
+        setattr(self, "sound", boolean)
+
+    def draw_background(self):
+        self.screen.blit(self.fond, self.fondrect)
 
     # Boucle de jeu
     def main_loop(self):
@@ -207,6 +228,7 @@ class Game(object):
 
     # Rafraichissement de l'ecran
     def draw_game_screen(self):
+
         # Affichage du fond du jeu
         self.screen.blit(self.fond, self.fondrect)
 
@@ -244,26 +266,26 @@ class Game(object):
         for obj in self.enemies:
             self.screen.blit(obj.image, obj.rect)
 
+        # Affichage des vies
         font = pygame.font.Font('freesansbold.ttf', 20)
         text = font.render('Vies : ' + str(self.ship.lives),
                            True, (255, 255, 255), (0, 0, 0))
         textRect = text.get_rect()
-        textRect.center = (595, 355)
+        textRect.center = (595, 455)
         self.screen.blit(text, textRect)
 
+        # Affichage du score
         font = pygame.font.Font('freesansbold.ttf', 20)
         text = font.render('Score : ' + str(self.score),
                            True, (255, 255, 255), (0, 0, 0))
         textRect = text.get_rect()
-        textRect.center = (595, 385)
+        textRect.center = (595, 485)
         self.screen.blit(text, textRect)
 
+        # Mise à jour de l'écran toute les 60 ms
         pygame.display.update()
         pygame.display.flip()
         self.clock.tick(60)
-
-    def draw_background(self):
-        self.screen.blit(self.fond, self.fondrect)
 
 ############################################################
 ####################### ENEMIES ############################
