@@ -18,7 +18,8 @@ class Game(object):
         self.screen = pygame.display.set_mode((640, 500))
         self.fond = pygame.image.load("img/util/earth.png").convert()
         self.fondrect = self.fond.get_rect()
-        self.ship_image = 0
+        self.ship_num = 1
+        self.path_ship_image = "img/ships/ship_1.gif"
 
     # Fonction principale du jeu
     def main(self):
@@ -30,11 +31,9 @@ class Game(object):
     def setup(self):
         self.closingGame = False
         self.score = 0
-        if(self.ship_image == 0):
-            self.ship = Ship(pygame.image.load("img/ships/ship.gif").convert(), self.screen, self.sound)
-        elif(self.ship_image == 1):
-            self.ship = Ship(pygame.image.load("img/ships/ship_2.gif").convert(), self.screen, self.sound)
-        self.ship.rect.y = 500 - 25
+        self.ship = Ship(pygame.image.load(self.path_ship_image).convert(), self.screen, self.sound)
+        self.ship.rect.x = 600/2
+        self.ship.rect.y = 500 - 50
         self.fond = pygame.image.load("img/util/stars.jpg").convert()
         self.fondrect = self.fond.get_rect()
         self.explosion = -20
@@ -58,19 +57,20 @@ class Game(object):
         self.menu.add_selector('Son : ', [('Sans', False), ('Avec', True)], onchange=self.set_sound)
 
         self.menu.add_button('Changer de vaisseau', self.changer_vaisseau)
-        self.imageShip = self.menu.add_image("img/ships/ship.gif", angle=0, scale=(2, 2), scale_smooth=True)
+        self.imageShip = self.menu.add_image(self.path_ship_image, angle=0, scale=(2, 2), scale_smooth=True)
 
         self.menu.mainloop(self.screen, bgfun=self.draw_background)
 
     def changer_vaisseau(self):
-        if(self.ship_image == 1):
-            setattr(self, "ship_image", 0)
-            self.menu.remove_widget(self.imageShip)
-            self.imageShip = self.menu.add_image("img/ships/ship.gif", angle=0, scale=(2, 2), scale_smooth=True)
+
+        if(self.ship_num == 33):
+            self.ship_num = 1
         else:
-            setattr(self, "ship_image", self.ship_image + 1)
-            self.menu.remove_widget(self.imageShip)
-            self.imageShip = self.menu.add_image("img/ships/ship_2.gif", angle=0, scale=(2, 2), scale_smooth=True)
+            self.ship_num += 1
+        
+        self.menu.remove_widget(self.imageShip)
+        self.path_ship_image = "img/ships/ship_" + str(self.ship_num) + ".gif"
+        self.imageShip = self.menu.add_image(self.path_ship_image, angle=0, scale=(2, 2), scale_smooth=True)
 
     def set_difficulty(self, value, ratio, difficulty):
         setattr(self, "difficulty", value)
@@ -215,7 +215,7 @@ class Game(object):
             # Affichage du vaisseau
             if(self.ship.invincibility > 0):
                 if(self.ship.invincibility % 5):
-                    image_invincible = pygame.image.load("img/ships/ship.gif").convert()
+                    image_invincible = pygame.image.load(self.path_ship_image).convert()
                     image_invincible.set_alpha(0)
                     self.screen.blit(image_invincible, self.ship.rect)
                 else:
