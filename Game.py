@@ -44,28 +44,33 @@ class Game(object):
         self.enemies.append(Enemy(self.screen, {"x": 400, "y": 0}, self.sound))
 
     def draw_menu_screen(self):
-        menu = pygame_menu.Menu(500, 640, 'Space-invader',
-                                theme=pygame_menu.themes.THEME_DARK)
+        
+        self.menu = pygame_menu.Menu(500, 640, 'Space-invader', theme=pygame_menu.themes.THEME_DARK)
 
-        menu.add_text_input('Pseudo :', default='USER')
+        self.menu.add_button('Jouer', self.start_the_game)
 
-        menu.add_selector('Difficulty : ', [('Facile', 1), ('Intermediaire', 2), ('Difficile', 3)], onchange=self.set_difficulty)
+        self.menu.add_button('Quitter', pygame_menu.events.EXIT)
 
-        menu.add_button('Changer de vaisseau', self.changer_vaisseau)
-        menu.add_image("img/ships/ship.gif", angle=0, scale=(2, 2), scale_smooth=True)
+        self.menu.add_text_input('Pseudo :', default='USER')
 
-        menu.add_selector('Son : ', [('Sans', False), ('Avec', True)], onchange=self.set_sound)
+        self.menu.add_selector('Difficulty : ', [('Facile', 1), ('Intermediaire', 2), ('Difficile', 3)], onchange=self.set_difficulty)
 
-        menu.add_button('Jouer', self.start_the_game)
-        menu.add_button('Quitter', pygame_menu.events.EXIT)
+        self.menu.add_selector('Son : ', [('Sans', False), ('Avec', True)], onchange=self.set_sound)
 
-        menu.mainloop(self.screen, bgfun=self.draw_background)
+        self.menu.add_button('Changer de vaisseau', self.changer_vaisseau)
+        self.imageShip = self.menu.add_image("img/ships/ship.gif", angle=0, scale=(2, 2), scale_smooth=True)
+
+        self.menu.mainloop(self.screen, bgfun=self.draw_background)
 
     def changer_vaisseau(self):
         if(self.ship_image == 1):
             setattr(self, "ship_image", 0)
+            self.menu.remove_widget(self.imageShip)
+            self.imageShip = self.menu.add_image("img/ships/ship.gif", angle=0, scale=(2, 2), scale_smooth=True)
         else:
             setattr(self, "ship_image", self.ship_image + 1)
+            self.menu.remove_widget(self.imageShip)
+            self.imageShip = self.menu.add_image("img/ships/ship_2.gif", angle=0, scale=(2, 2), scale_smooth=True)
 
     def set_difficulty(self, value, ratio, difficulty):
         setattr(self, "difficulty", value)
