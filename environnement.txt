@@ -1,8 +1,8 @@
 https://www.python.org/ftp/python/3.9.2/python-3.9.2rc1-amd64.exe
 
 python3 -m pip install -U pygame --user
-python3 -m pygame.examples.aliens
+python3 -m pygame.examples.aliens (pour test)
 
 pip install pygame-menu
 
-auto-py-to-exe
+auto-py-to-exe (pour faire un exe)

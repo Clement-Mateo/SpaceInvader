@@ -199,6 +199,7 @@ class Game(object):
 
                 # Et on lance le son d'explosion si le son n'est pas desactivé
                 if self.sound:
+                    pygame.mixer.music.load("sons/sf_explosion_01.mp3") # on charge la musique de game over
                     pygame.mixer.music.play()
 
                 # On affiche ca pendant 2 secondes
@@ -482,7 +483,6 @@ class Ship():
         self.invincibility = 100
         self.sound = pygame.mixer.Sound("sons/shoot.wav")
         self.is_sound = isSound
-        pygame.mixer.music.load("sons/sf_explosion_01.mp3")
 
     def update(self):
 
@@ -512,6 +512,25 @@ class Ship():
                     self.sound.play()
 
                 self.latency = 0
+
+############################################################
+######################### BONUS ############################
+############################################################
+
+class Bonus(): #TODO
+    def __init__(self, image, screen, isSound):
+        # proprietes du vaisseau
+        self.width = 30
+        self.height = 18
+        self.image = image
+        self.screen = screen
+        self.rect = image.get_rect()
+        self.missiles = []
+        self.latency = 0
+        self.lives = 3
+        self.invincibility = 100
+        self.sound = pygame.mixer.Sound("sons/shoot.wav")
+        self.is_sound = isSound
 
 # animation()
 game = Game()
