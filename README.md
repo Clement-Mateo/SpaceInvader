@@ -6,11 +6,12 @@
 ![Game.exe](https://raw.githubusercontent.com/clementor5/SpaceInvader/main/imgReadMe/game.exe.png)
 
 #### Au démarage du jeu, un menu apparaitra pour vous proposez différents choix :
-- Choisir votre pseudonyme (pas encore d'incidence sur le jeu)
-- Choisir la difficulté du jeu (pas encore développé donc aucune incidence réelle sur l'expérience du joueur actuellement)
-- Activer ou desactiver le son du jeu
 - Lancer le jeu
 - Quitter le jeu
+- Choisir votre pseudonyme (pas encore d'incidence sur le jeu)
+- Choisir la difficulté du jeu (pas encore d'incidence sur le jeu)
+- Activer ou desactiver le son du jeu
+- Changer de vaisseau
 
 ![Menu](https://raw.githubusercontent.com/clementor5/SpaceInvader/main/imgReadMe/menu.png)
 
