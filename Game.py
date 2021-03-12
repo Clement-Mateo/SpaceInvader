@@ -174,18 +174,12 @@ class Game(object):
                 self.ship.image = pygame.image.load("img/util/explode_7.gif").convert()
             elif(self.explosion == 0): # A la fin de l'animation
                 self.ship.image = pygame.image.load("img/util/explode_8.gif").convert()
-                # On change le fond
-                self.fond = pygame.image.load("img/util/explode.gif").convert()
+                
+                # On affiche Game Over et le score
+                self.fond = pygame.image.load("img/util/game_over.png").convert()
                 self.fond = pygame.transform.scale(
                     self.fond, (640, 500))
                 self.screen.blit(self.fond, self.fondrect)
-
-                # On affiche Game Over et le score
-                font = pygame.font.Font('freesansbold.ttf', 80)
-                text = font.render('GAME OVER', True, (255, 255, 255), (0, 0, 0))
-                textRect = text.get_rect()
-                textRect.center = (320, 200)
-                self.screen.blit(text, textRect)
 
                 font = pygame.font.Font('freesansbold.ttf', 40)
                 text = font.render('Score : ' + str(self.score),
@@ -299,6 +293,7 @@ class EnemyMissile():
         self.height = 10
         self.image = image
         self.rect = image.get_rect()
+        self.rect.width += image.get_size()[0]/2 # A revoir : pour que les ennemies tirent de puis le millieu de l'image
         self.speed = speed
 
 # Meme chose que 'self.rect.y = self.rect.y - speed'
