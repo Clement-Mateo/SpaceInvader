@@ -36,13 +36,12 @@ Vous pouvez aussi retrouver votre score lorsque vous perdez toutes vos vies.
 ![fin_de_partie](https://raw.githubusercontent.com/clementor5/SpaceInvader/main/imgReadMe/fin_de_partie.png)
 
 -----------------------------------------------------------------------------------------------------------------
+#TODO centrer les tirs des missiles
 
 #TODO ameliorer l'apparition des ennemis (waves ou random)
 
 #TODO ordre difficulté + gerer difficulté
 
 #TODO changer missiles en fonction des ennemis
-
-#TODO choisir parmis plusieurs vaisseaux
 
 #TODO ajouter des bonus
